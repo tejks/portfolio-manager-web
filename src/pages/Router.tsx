@@ -1,6 +1,8 @@
-import Navbar from "@/components/Layout/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { Outlet, createBrowserRouter } from "react-router-dom";
-import Signin from "./Auth/Signin";
+
+import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
 import ErrorPage from "./ErrorPage";
 import Home from "./Home";
 
@@ -23,8 +25,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "signin",
-        element: <Signin />,
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
       },
     ],
   },
