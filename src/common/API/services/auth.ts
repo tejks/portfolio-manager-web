@@ -1,14 +1,33 @@
 import { env } from "@/common/config/env";
+import { RootState } from "@/common/store";
+import { AuthState } from "@/common/store/authSlice";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AuthUser, IUser } from "../models/user.model";
+
+export interface UserResponse {
+  user: AuthUser;
+  token: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: env.VITE_SERVER_URL,
     credentials: "include",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
-    signin: builder.mutation<AuthUser, { email: string; password: string }>({
+    signin: builder.mutation<AuthState, LoginRequest>({
       query: ({ email, password }) => ({
         url: "auth/signin",
         method: "POST",
@@ -23,12 +42,6 @@ export const authApi = createApi({
         url: "auth/signup",
         method: "POST",
         body: data,
-      }),
-    }),
-    signout: builder.mutation<any, void>({
-      query: () => ({
-        url: "auth/signout",
-        method: "POST",
       }),
     }),
     current: builder.query<any, void>({
@@ -52,11 +65,5 @@ export const authApi = createApi({
   }),
 });
 
-export const {
-  useSigninMutation,
-  useSignupMutation,
-  useSignoutMutation,
-  useCurrentQuery,
-  useGetAllUsersQuery,
-  useGetUserByIdQuery,
-} = authApi;
+export const { useSigninMutation, useSignupMutation, useCurrentQuery, useGetAllUsersQuery, useGetUserByIdQuery } =
+  authApi;

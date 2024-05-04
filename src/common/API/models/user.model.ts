@@ -5,7 +5,7 @@ export interface IUser {
 }
 
 export interface AuthUser {
-  userId: string;
+  id: string;
   email: string;
 }
 

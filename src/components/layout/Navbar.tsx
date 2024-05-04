@@ -4,7 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 
 import Button from "@/components/common/Button";
 
-import { useCurrentQuery, useSignoutMutation } from "@/common/API/services/auth";
+import { useCurrentQuery } from "@/common/API/services/auth";
 import { cn } from "@/common/utils/cn";
 
 interface NavbarMenuElement {
@@ -20,8 +20,6 @@ const Navbar: React.FC = () => {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
-
-  const [signOut] = useSignoutMutation();
 
   const [navbarMenu, setNavbarMenu] = useState<NavbarMenuElement[]>([{ name: "Home", url: "/", isActive: true }]);
 
