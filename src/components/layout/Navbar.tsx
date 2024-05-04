@@ -1,14 +1,14 @@
 /* eslint-disable no-constant-condition */
-import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-import Button from "@components/elements/Button";
+import Button from "@/components/common/Button";
 
 import {
   useCurrentQuery,
   useSignoutMutation,
 } from "@/common/API/services/auth";
+import { cn } from "@/common/utils/cn";
 
 interface NavbarMenuElement {
   name: string;
@@ -26,10 +26,8 @@ const Navbar: React.FC = () => {
 
   const [signOut] = useSignoutMutation();
 
-  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [navbarMenu, setNavbarMenu] = useState<NavbarMenuElement[]>([
     { name: "Home", url: "/", isActive: true },
-    { name: "Sign in", url: "/signin", isActive: false, isMobile: true },
   ]);
 
   useEffect(() => {
@@ -59,11 +57,11 @@ const Navbar: React.FC = () => {
                   <li key={element.name}>
                     <NavLink
                       to={element.url}
-                      className={clsx(
+                      className={cn(
                         "block bg-transparent py-2 pl-3 pr-4 font-semibold",
                         element.isActive
-                          ? "text-pink-500"
-                          : "text-gray-500 hover:text-pink-900"
+                          ? "text-[#4d3c64]"
+                          : "text-gray-500 hover:text-[#4d3c64]"
                       )}
                       aria-current="page"
                     >
@@ -76,8 +74,8 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="mx-5 flex flex-1 items-center justify-end">
-          <Button type="button" size="sm" to="/signin">
-            Sign in
+          <Button type="button" to="/login">
+            Login
           </Button>
         </div>
       </div>

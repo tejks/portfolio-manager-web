@@ -1,7 +1,7 @@
 const Home: React.FC = () => {
   return (
-    <div className="text-center">
-      <h1 className="inline-block bg-gradient-to-r from-[#FB9D1F] to-[#1C5C75] bg-clip-text text-9xl  text-transparent">
+    <div className="text-center mt-96">
+      <h1 className="inline-block bg-gradient-to-r from-[#4d3c64] to-[#cacaca] bg-clip-text text-9xl  text-transparent">
         Home
       </h1>
     </div>
