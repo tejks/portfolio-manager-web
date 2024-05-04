@@ -3,17 +3,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { authApi } from "../API/services/auth";
 
-export const createStore = (
-  options?: ConfigureStoreOptions["preloadedState"] | undefined
-) =>
-  configureStore({
-    reducer: {
-      [authApi.reducerPath]: authApi.reducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(authApi.middleware),
-    ...options,
-  });
+export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | undefined) =>
+    configureStore({
+        reducer: {
+            [authApi.reducerPath]: authApi.reducer,
+        },
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware),
+        ...options,
+    });
 
 export const store = createStore();
 
