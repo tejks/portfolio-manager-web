@@ -9,107 +9,107 @@ import Button from "@components/common/Button";
 import Input from "@components/common/Input";
 
 type FormValues = {
-    email: string;
-    userName: string;
-    password: string;
-    confirmPassword: string;
+  email: string;
+  userName: string;
+  password: string;
+  confirmPassword: string;
 };
 
 const Signup: React.FC = () => {
-    const validationSchema = z
-        .object({
-            email: z.string().min(1, "Email is required").email("Invalid email format"),
-            password: z.string().min(1, "Password is required"),
-            userName: z.string().min(1, "Username is required"),
-            confirmPassword: z.string().min(1, "Confirm password is required"),
-        })
-        .refine((data) => data.password === data.confirmPassword, {
-            message: "Passwords don't match",
-            path: ["confirmPassword"],
-        });
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormValues>({
-        resolver: zodResolver(validationSchema),
-        mode: "onChange",
+  const validationSchema = z
+    .object({
+      email: z.string().min(1, "Email is required").email("Invalid email format"),
+      password: z.string().min(1, "Password is required"),
+      userName: z.string().min(1, "Username is required"),
+      confirmPassword: z.string().min(1, "Confirm password is required"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ["confirmPassword"],
     });
 
-    const navigate = useNavigate();
-    const [signUp] = useSignupMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(validationSchema),
+    mode: "onChange",
+  });
 
-    const onSubmit: SubmitHandler<FormValues> = async ({ email, password, userName }) => {
-        const formData = new FormData();
+  const navigate = useNavigate();
+  const [signUp] = useSignupMutation();
 
-        formData.append("username", userName);
-        formData.append("email", email);
-        formData.append("password", password);
+  const onSubmit: SubmitHandler<FormValues> = async ({ email, password, userName }) => {
+    const formData = new FormData();
 
-        await signUp(formData);
-        navigate("/login");
-    };
+    formData.append("username", userName);
+    formData.append("email", email);
+    formData.append("password", password);
 
-    return (
-        <div className="shadow-input mx-auto mt-60 w-full max-w-md rounded-none bg-neutral-100 px-12 py-5 md:rounded-2xl">
-            <h2 className="my-6 text-center text-2xl font-bold text-neutral-700">Create a new account</h2>
+    await signUp(formData);
+    navigate("/login");
+  };
 
-            <form className="mt-10" action="#" onSubmit={handleSubmit(onSubmit)}>
-                <div className="space-y-6">
-                    <Input
-                        labelValue="Your email"
-                        type="email"
-                        id="email"
-                        className=""
-                        placeholder="example@example.com"
-                        error={errors["email"]}
-                        register={register("email")}
-                    />
-                    <Input
-                        labelValue="Username"
-                        type="text"
-                        id="userName"
-                        className=""
-                        placeholder="example"
-                        error={errors["userName"]}
-                        register={register("userName")}
-                    />
-                    <Input
-                        labelValue="Password"
-                        type="password"
-                        id="password"
-                        className=""
-                        placeholder="•••••••••••••"
-                        error={errors["password"]}
-                        register={register("password")}
-                    />
-                    <Input
-                        labelValue="Confirm password"
-                        type="password"
-                        id="confirmPassword"
-                        className=""
-                        placeholder="•••••••••••••"
-                        error={errors["confirmPassword"]}
-                        register={register("confirmPassword")}
-                    />
-                </div>
+  return (
+    <div className="shadow-input mx-auto mt-60 w-full max-w-md rounded-none bg-neutral-100 px-12 py-5 md:rounded-2xl">
+      <h2 className="my-6 text-center text-2xl font-bold text-neutral-700">Create a new account</h2>
 
-                <div className="mt-10 text-center">
-                    <Button color="primary" className="my-0.5 lg:my-2" type="submit">
-                        Login
-                    </Button>
-                </div>
-
-                <div className="mt-6 text-center text-xs font-medium text-neutral-400 lg:text-sm">
-                    You already have an account?{" "}
-                    <Link to={"/login"} className="text-[#4d3c64]">
-                        Login
-                    </Link>
-                </div>
-            </form>
+      <form className="mt-10" action="#" onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-6">
+          <Input
+            labelValue="Your email"
+            type="email"
+            id="email"
+            className=""
+            placeholder="example@example.com"
+            error={errors["email"]}
+            register={register("email")}
+          />
+          <Input
+            labelValue="Username"
+            type="text"
+            id="userName"
+            className=""
+            placeholder="example"
+            error={errors["userName"]}
+            register={register("userName")}
+          />
+          <Input
+            labelValue="Password"
+            type="password"
+            id="password"
+            className=""
+            placeholder="•••••••••••••"
+            error={errors["password"]}
+            register={register("password")}
+          />
+          <Input
+            labelValue="Confirm password"
+            type="password"
+            id="confirmPassword"
+            className=""
+            placeholder="•••••••••••••"
+            error={errors["confirmPassword"]}
+            register={register("confirmPassword")}
+          />
         </div>
-    );
+
+        <div className="mt-10 text-center">
+          <Button color="primary" className="my-0.5 lg:my-2" type="submit">
+            Login
+          </Button>
+        </div>
+
+        <div className="mt-6 text-center text-xs font-medium text-neutral-400 lg:text-sm">
+          You already have an account?{" "}
+          <Link to={"/login"} className="text-[#4d3c64]">
+            Login
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default Signup;

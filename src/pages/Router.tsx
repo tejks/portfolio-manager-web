@@ -7,33 +7,33 @@ import ErrorPage from "./ErrorPage";
 import Home from "./Home";
 
 function Layout() {
-    return (
-        <>
-            <Navbar />
-            <Outlet />
-        </>
-    );
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
 }
 
 const router = createBrowserRouter([
-    {
-        element: <Layout />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "/",
-                element: <Home />,
-            },
-            {
-                path: "login",
-                element: <Login />,
-            },
-            {
-                path: "signup",
-                element: <Signup />,
-            },
-        ],
-    },
+  {
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+    ],
+  },
 ]);
 
 export default router;
