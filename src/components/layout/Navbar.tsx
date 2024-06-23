@@ -21,7 +21,11 @@ const Navbar: React.FC = () => {
     refetchOnReconnect: true,
   });
 
-  const [navbarMenu, setNavbarMenu] = useState<NavbarMenuElement[]>([{ name: "Home", url: "/", isActive: true }]);
+  const [navbarMenu, setNavbarMenu] = useState<NavbarMenuElement[]>([
+    { name: "Home", url: "/", isActive: true },
+    { name: "Portfolio", url: "/portfolio", isActive: false },
+    { name: "Transactions", url: "/transactions", isActive: false },
+  ]);
 
   useEffect(() => {
     const newNavbarMenu = navbarMenu.map((element) => {
@@ -40,7 +44,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="w-full">
-      <div className="hidden justify-between p-4 lg:flex">
+      <div className="hidden justify-between p-7 lg:flex">
         <div className="flex flex-1 items-center justify-start">
           <div className="ml-5" id="navbar-default">
             <ul className="flex font-normal">

@@ -5,6 +5,9 @@ import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
 import ErrorPage from "./ErrorPage";
 import Home from "./Home";
+import Portfolio from "./Portfolio";
+import Token from "./Token";
+import Transactions from "./Transactions";
 
 function Layout() {
   return (
@@ -23,6 +26,18 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "portfolio",
+        element: <Portfolio />,
+      },
+      {
+        path: "portfolio/tokens/:id",
+        element: <Token />,
+      },
+      {
+        path: "transactions",
+        element: <Transactions />,
       },
       {
         path: "login",

@@ -15,7 +15,7 @@ function Button({ children, onClick, type = "button", className = "", to, ...res
     <button
       type={type}
       className={cn(
-        "duration-400 inline-block transform rounded-lg bg-[#4d3c64] px-7 py-2 font-semibold text-neutral-200 shadow-2xl transition hover:-translate-y-0.5 hover:shadow-sky-300/50",
+        "duration-400 inline-block transform rounded-lg bg-[#713483] px-7 py-2 font-semibold text-neutral-200 shadow-2xl transition hover:-translate-y-0.5 hover:shadow-sky-300/50",
         className,
       )}
       onClick={to ? () => navigate(to) : onClick}
