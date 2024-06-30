@@ -4,13 +4,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-import { useSignupMutation } from "@/common/API/services/auth";
+import { useRegisterMutation } from "@/common/API/services/auth";
 import Button from "@components/common/Button";
 import Input from "@components/common/Input";
 
 type FormValues = {
   email: string;
-  userName: string;
+  username: string;
   password: string;
   confirmPassword: string;
 };
@@ -20,7 +20,7 @@ const Signup: React.FC = () => {
     .object({
       email: z.string().min(1, "Email is required").email("Invalid email format"),
       password: z.string().min(1, "Password is required"),
-      userName: z.string().min(1, "Username is required"),
+      username: z.string().min(1, "Username is required"),
       confirmPassword: z.string().min(1, "Confirm password is required"),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -38,16 +38,16 @@ const Signup: React.FC = () => {
   });
 
   const navigate = useNavigate();
-  const [signUp] = useSignupMutation();
+  const [registerAccount] = useRegisterMutation();
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ email, password, userName }) => {
-    const formData = new FormData();
-
-    formData.append("username", userName);
-    formData.append("email", email);
-    formData.append("password", password);
-
-    await signUp(formData);
+  const onSubmit: SubmitHandler<FormValues> = async ({ email, password, username }) => {
+    await registerAccount({
+      email,
+      password,
+      username,
+      firstName: "",
+      lastName: "",
+    });
     navigate("/login");
   };
 
@@ -69,11 +69,11 @@ const Signup: React.FC = () => {
           <Input
             labelValue="Username"
             type="text"
-            id="userName"
+            id="username"
             className=""
             placeholder="example"
-            error={errors["userName"]}
-            register={register("userName")}
+            error={errors["username"]}
+            register={register("username")}
           />
           <Input
             labelValue="Password"

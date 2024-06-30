@@ -1,10 +1,13 @@
 /* eslint-disable no-constant-condition */
 import React, { useEffect, useState } from "react";
+import { IoExitOutline } from "react-icons/io5";
 import { NavLink, useLocation } from "react-router-dom";
 
 import Button from "@/components/common/Button";
 
 import { useCurrentQuery } from "@/common/API/services/auth";
+import { useAppDispatch, useTypedSelector } from "@/common/store";
+import { logout, selectCurrentUser } from "@/common/store/authSlice";
 import { cn } from "@/common/utils/cn";
 
 interface NavbarMenuElement {
@@ -16,6 +19,9 @@ interface NavbarMenuElement {
 
 const Navbar: React.FC = () => {
   const location = useLocation();
+  const user = useTypedSelector(selectCurrentUser);
+  const dispatch = useAppDispatch();
+
   useCurrentQuery(undefined, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
@@ -41,6 +47,10 @@ const Navbar: React.FC = () => {
     setNavbarMenu(newNavbarMenu);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <nav className="w-full">
@@ -69,9 +79,16 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="mx-5 flex flex-1 items-center justify-end">
-          <Button type="button" to="/login">
-            Login
-          </Button>
+          {user ? (
+            <div className="flex items-center">
+              <div>{user.email}</div>
+              <IoExitOutline className="ml-4 h-7 w-7 cursor-pointer" onClick={() => dispatch(logout())} />
+            </div>
+          ) : (
+            <Button type="button" to="/login">
+              Login
+            </Button>
+          )}
         </div>
       </div>
     </nav>

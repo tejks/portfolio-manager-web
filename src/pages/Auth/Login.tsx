@@ -2,9 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+
 import { z } from "zod";
 
-import { useSigninMutation } from "@/common/API/services/auth";
+import { useLoginMutation } from "@/common/API/services/auth";
 import Button from "@/components/common/Button";
 import Input from "@components/common/Input";
 
@@ -14,6 +15,10 @@ type FormValues = {
 };
 
 const Login: React.FC = () => {
+  const [login] = useLoginMutation();
+
+  const navigate = useNavigate();
+
   const validationSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email format"),
     password: z.string().min(1, "Password is required"),
@@ -28,10 +33,13 @@ const Login: React.FC = () => {
     mode: "onChange",
   });
 
-  const [signIn] = useSigninMutation();
-  const navigate = useNavigate();
-  const onSubmit: SubmitHandler<FormValues> = async ({ email, password }) =>
-    signIn({ email, password }).then(() => navigate("/"));
+  const onSubmit: SubmitHandler<FormValues> = async ({ email, password }) => {
+    await login({ email, password })
+      .unwrap()
+      .then(() => {
+        navigate("/portfolio");
+      });
+  };
 
   return (
     <div className="shadow-input mx-auto mt-72 w-full max-w-md rounded-none bg-neutral-100 px-12 py-5 md:rounded-2xl">

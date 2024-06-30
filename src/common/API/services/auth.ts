@@ -1,22 +1,45 @@
-import { env } from "@/common/config/env";
 import { RootState } from "@/common/store";
-import { AuthState } from "@/common/store/authSlice";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { AuthUser, IUser } from "../models/user.model";
-
-export interface UserResponse {
-  user: AuthUser;
-  token: string;
-}
 
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
+export interface LoginResponse {
+  loginResult: {
+    isAuthenticated: boolean;
+    email: string;
+    message: string;
+    token: string;
+    refreshToken: string;
+    refreshTokenExpiration: string;
+  };
+  userData: CurrentUserResponse;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface CurrentUserResponse {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  username: string;
+  email: string;
+  role: number;
+  createdAt: string;
+}
+
 export const authApi = createApi({
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: env.VITE_SERVER_URL,
+    baseUrl: "http://localhost:8081/",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
@@ -27,43 +50,27 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    signin: builder.mutation<AuthState, LoginRequest>({
-      query: ({ email, password }) => ({
-        url: "auth/signin",
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      query: (body) => ({
+        url: "auth/login",
         method: "POST",
-        body: {
-          username: email,
-          password,
-        },
+        body,
       }),
     }),
-    signup: builder.mutation<any, FormData>({
-      query: (data) => ({
-        url: "auth/signup",
+    register: builder.mutation<CurrentUserResponse, RegisterRequest>({
+      query: (body) => ({
+        url: "auth/register",
         method: "POST",
-        body: data,
+        body,
       }),
     }),
-    current: builder.query<any, void>({
+    current: builder.query<CurrentUserResponse, void>({
       query: () => ({
-        url: "users/current",
-        method: "GET",
-      }),
-    }),
-    getAllUsers: builder.query<IUser[], void>({
-      query: () => ({
-        url: "users",
-        method: "GET",
-      }),
-    }),
-    getUserById: builder.query<IUser, string>({
-      query: (id) => ({
-        url: `users/${id}`,
+        url: "auth/currentUser",
         method: "GET",
       }),
     }),
   }),
 });
 
-export const { useSigninMutation, useSignupMutation, useCurrentQuery, useGetAllUsersQuery, useGetUserByIdQuery } =
-  authApi;
+export const { useLoginMutation, useRegisterMutation, useCurrentQuery } = authApi;

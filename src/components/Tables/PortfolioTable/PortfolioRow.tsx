@@ -1,29 +1,26 @@
 import React from "react";
 
-import { PortfolioData } from "@/common/store/portfolioSlice";
+import { SummarisedTransactionResponse } from "@/common/API/services/transactions";
 import { cn } from "@/common/utils/cn";
 import useCurrencyPrice from "@/hooks/useCurrencyPrice";
-import useTokenMetadata from "@/hooks/useTokenMetadata";
 import { useNavigate } from "react-router-dom";
 
 interface PortfolioRowProps {
-  row: PortfolioData;
+  row: SummarisedTransactionResponse;
   allTokensValue: number;
 }
 
 const PortfolioRow: React.FC<PortfolioRowProps> = ({ row, allTokensValue }) => {
   const navigator = useNavigate();
-  const tokenMetadata = useTokenMetadata(row.address);
   const mainCurrencyPrice = useCurrencyPrice("PLN");
-  const fullAmount = row.data.reduce((acc, row) => acc + row.amount, 0);
-  const avgPrice = row.data.reduce((acc, row) => acc + row.avgPrice, 0) / row.data.length;
+  const fullAmount = row.totalPositiveAmount - row.totalNegativeAmount;
+  const avgPrice = row.averageBuyPrice;
 
-  if (!tokenMetadata) return null;
-
-  const getCurrentShare = () => (allTokensValue === 0 ? 0 : ((fullAmount * row.currentPrice) / allTokensValue) * 100);
-  const getDolarValue = () => fullAmount * row.currentPrice;
-  const getMainCurrencyValue = () => (mainCurrencyPrice ? fullAmount * row.currentPrice * mainCurrencyPrice : 0);
-  const getPriceChange = () => ((row.currentPrice - avgPrice) / avgPrice) * 100;
+  const getCurrentShare = () =>
+    allTokensValue === 0 ? 0 : ((fullAmount * row.token.currentPrice) / allTokensValue) * 100;
+  const getDolarValue = () => fullAmount * row.token.currentPrice;
+  const getMainCurrencyValue = () => (mainCurrencyPrice ? fullAmount * row.token.currentPrice * mainCurrencyPrice : 0);
+  const getPriceChange = () => ((row.token.currentPrice - avgPrice) / avgPrice) * 100;
 
   const priceChangeStyles = (change: number) => {
     if (change > 0) return "text-green-600";
@@ -33,21 +30,23 @@ const PortfolioRow: React.FC<PortfolioRowProps> = ({ row, allTokensValue }) => {
 
   return (
     <tr
-      key={row.address}
       className="cursor-pointer rounded-lg text-right hover:bg-[#651b7415]"
-      onClick={() => navigator(`tokens/${row.address}`)}
+      onClick={() => navigator(`tokens/${row.token.id}`)}
     >
       <td className="px-7 py-5 text-left">
-        <img src={tokenMetadata.logoURI} alt={tokenMetadata.name} className="h-8 w-8 rounded-full" />
+        <img src={row.token.logo} alt={row.token.name} className="h-8 w-8 rounded-full" />
       </td>
       <td>
-        <div className="text-left text-sm font-semibold text-gray-900">{tokenMetadata.symbol}</div>
+        <div className="text-left text-sm font-semibold uppercase text-gray-900">{row.token.symbol}</div>
       </td>
-      <td className="text-center">{tokenMetadata.name}</td>
-      <td className="text-center">{row.data[0].broker}</td>
+      <td className="text-center">{row.token.name}</td>
+      <td className="flex items-center justify-center">
+        <img src={row.brokers[0].logo} alt={row.brokers[0].name} className="h-4" />
+        {row.brokers.length > 1 && <p className="ml-1 text-neutral-700">+ {row.brokers.length}</p>}
+      </td>
       <td>{fullAmount}</td>
       <td>{avgPrice}</td>
-      <td>{row.currentPrice}</td>
+      <td>{row.token.currentPrice}</td>
       <td className={cn("font-semibold", priceChangeStyles(getPriceChange()))}>{getPriceChange().toFixed(1)} %</td>
       <td>{getDolarValue().toFixed(2)}</td>
       <td>{getMainCurrencyValue().toFixed(2)}</td>

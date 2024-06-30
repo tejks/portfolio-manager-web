@@ -1,43 +1,41 @@
 import React from "react";
 
-import { TransactionData, TransactionType } from "@/common/store/transactionSlice";
+import { TransactionResponse } from "@/common/API/services/transactions";
 import { cn } from "@/common/utils/cn";
-import useTokenMetadata from "@/hooks/useTokenMetadata";
 
 interface TransactionRowProps {
-  row: TransactionData;
+  row: TransactionResponse;
 }
 
 const TransactionRow: React.FC<TransactionRowProps> = ({ row }) => {
-  const tokenMetadata = useTokenMetadata(row.address);
-
-  if (!tokenMetadata) return null;
-
   return (
-    <tr key={row.address} className="rounded-lg text-center hover:bg-[#651b7415]">
+    <tr key={row.id} className="rounded-lg text-center hover:bg-[#651b7415]">
       <td>
         <span
           className={cn(
             "rounded-lg border-2 px-2.5 py-1 text-xs font-bold uppercase ",
-            row.type === "buy"
+            row.transactionType === 0
               ? "border-green-800 bg-green-200 text-green-800"
               : "border-red-800 bg-red-200 text-red-800",
           )}
         >
-          {row.type}
+          {row.transactionType === 0 ? "Buy" : "Sell"}
         </span>
       </td>
       <td className="ml-5 flex items-center justify-center py-4">
-        <img src={tokenMetadata.logoURI} alt={tokenMetadata.name} className="mr-2 h-6 w-6 rounded-full" />
-        <span className="text-sm font-semibold text-gray-900">{tokenMetadata.symbol}</span>
+        <img src={row.token.logo} alt={row.token.name} className="mr-2 h-6 w-6 rounded-full" />
+        <span className="text-sm font-semibold uppercase text-gray-900">{row.token.symbol}</span>
       </td>
-      <td>{tokenMetadata.name}</td>
-      <td>{row.broker}</td>
-      <td className={cn("font-semibold", row.type === TransactionType.BUY ? "text-green-700" : "text-red-700")}>
-        {row.type === TransactionType.BUY ? "+" : "-"} {row.amount}
+      <td>{row.token.name}</td>
+      <td className="flex items-center justify-center">
+        <img src={row.broker.logo} alt="" className="h-4" />
+      </td>
+      <td className={cn("font-semibold", row.transactionType === 0 ? "text-green-700" : "text-red-700")}>
+        {row.transactionType === 0 ? "+" : "-"} {row.quantity}
       </td>
       <td>{row.price}</td>
-      <td>{row.date}</td>
+      <td>{(row.price * row.quantity).toFixed(2)} $</td>
+      <td>{new Date(row.datetime).toDateString()}</td>
     </tr>
   );
 };

@@ -1,11 +1,11 @@
 import React from "react";
 
-import { TransactionData } from "@/common/store/transactionSlice";
+import { TransactionResponse } from "@/common/API/services/transactions";
 import SortingCell from "../SortingCell";
 import TransactionRow from "./TransactionRow";
 
 interface TransactionsTableProps {
-  data: TransactionData[];
+  data: TransactionResponse[];
 }
 
 const TransactionsTable: React.FC<TransactionsTableProps> = ({ data }) => {
@@ -19,6 +19,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ data }) => {
           <SortingCell>Broker</SortingCell>
           <SortingCell>Amount</SortingCell>
           <SortingCell>Price</SortingCell>
+          <SortingCell>Value</SortingCell>
           <SortingCell>Date</SortingCell>
         </tr>
       </thead>

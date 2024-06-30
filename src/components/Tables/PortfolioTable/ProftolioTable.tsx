@@ -1,16 +1,16 @@
 import React from "react";
 
-import { PortfolioData } from "@/common/store/portfolioSlice";
+import { SummarisedTransactionResponse } from "@/common/API/services/transactions";
 import SortingCell from "../SortingCell";
 import PortfolioRow from "./PortfolioRow";
 
 interface PortfolioTableProps {
-  data: PortfolioData[];
+  data: SummarisedTransactionResponse[];
 }
 
 const PortfolioTable: React.FC<PortfolioTableProps> = ({ data }) => {
   const allTokensValue = data.reduce(
-    (acc, row) => acc + row.currentPrice * row.data.reduce((acc, row) => acc + row.amount, 0),
+    (acc, row) => acc + (row.totalPositiveAmount + row.totalNegativeAmount) * row.token.currentPrice,
     0,
   );
 
@@ -33,7 +33,7 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({ data }) => {
       </thead>
       <tbody className="relative">
         {data.map((row) => (
-          <PortfolioRow key={row.address} row={row} allTokensValue={allTokensValue} />
+          <PortfolioRow key={row.token.id} row={row} allTokensValue={allTokensValue} />
         ))}
       </tbody>
     </table>

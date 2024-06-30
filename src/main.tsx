@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./index.scss";
 
 import { store } from "@common/store";
