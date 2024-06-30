@@ -97,7 +97,7 @@ const Signup: React.FC = () => {
 
         <div className="mt-10 text-center">
           <Button color="primary" className="my-0.5 lg:my-2" type="submit">
-            Login
+            Register
           </Button>
         </div>
 
