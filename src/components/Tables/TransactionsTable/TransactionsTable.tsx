@@ -24,9 +24,11 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
-          <TransactionRow key={row.id} row={row} />
-        ))}
+        {[...data]
+          .sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime())
+          .map((row) => (
+            <TransactionRow key={row.id} row={row} />
+          ))}
       </tbody>
     </table>
   );

@@ -41,7 +41,7 @@ const PortfolioRow: React.FC<PortfolioRowProps> = ({ row, allTokensValue }) => {
       </td>
       <td className="text-center">{row.token.name}</td>
       <td className="flex items-center justify-center">
-        <img src={row.brokers[0].logo} alt={row.brokers[0].name} className="h-4" />
+        <img src={row.brokers[0].logo} alt={row.brokers[0].name} className="h-4 w-20" />
         {row.brokers.length > 1 && <p className="ml-1 text-neutral-700">+ {row.brokers.length}</p>}
       </td>
       <td>{fullAmount}</td>

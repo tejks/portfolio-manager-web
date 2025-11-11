@@ -13,7 +13,7 @@ const Portfolio: React.FC = () => {
   });
 
   return (
-    <main className="container mx-auto">
+    <main className="container mx-auto mb-10">
       <h1 className="mt-8 text-3xl font-semibold">Portfolio</h1>
 
       {!user ? (

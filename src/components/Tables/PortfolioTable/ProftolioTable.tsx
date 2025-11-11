@@ -32,9 +32,11 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({ data }) => {
         </tr>
       </thead>
       <tbody className="relative">
-        {data.map((row) => (
-          <PortfolioRow key={row.token.id} row={row} allTokensValue={allTokensValue} />
-        ))}
+        {[...data]
+          .sort((a, b) => a.token.symbol.localeCompare(b.token.symbol))
+          .map((row) => (
+            <PortfolioRow key={row.token.id} row={row} allTokensValue={allTokensValue} />
+          ))}
       </tbody>
     </table>
   );
