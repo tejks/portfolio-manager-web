@@ -54,7 +54,7 @@ Built with Vite, React and TypeScript, this repository contains the front-end of
 Clone the repository and install dependencies:
 
 ```sh
-git clone <repo-url>
+git clone https://github.com/tejks/portfolio-manager-web
 cd portfolio-manager-web
 npm install
 # or
